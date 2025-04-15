@@ -1,0 +1,123 @@
+/* Основные стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+}
+
+/* Сайдбар */
+.sidebar {
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #495057;
+}
+
+/* Контент */
+.content {
+    margin-left: 270px;
+    padding: 20px;
+    width: 100%;
+}
+
+h1 {
+    color: #333;
+}
+
+/* Мониторинг */
+.dashboard {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+/* Управление пользователями */
+.user-management table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.user-management th, .user-management td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.user-management th {
+    background-color: #007bff;
+    color: white;
+}
+
+.user-management tr:hover {
+    background-color: #f1f1f1;
+}
+
+button {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:first-child {
+    background-color: #ffc107;
+}
+
+button:first-child:hover {
+    background-color: #e0a800;
+}
+
+button:last-child {
+    background-color: #dc3545;
+    color: white;
+}
+
+button:last-child:hover {
+    background-color: #c82333;
+}
