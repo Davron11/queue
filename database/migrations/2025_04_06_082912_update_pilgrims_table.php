@@ -13,8 +13,8 @@ return new class extends Migration
             $table->dropColumn('address');
 
             // Добавляем новое поле, которое будет ссылаться на pilgrim_details
-            $table->unsignedBigInteger('pilgrim_details_id')->nullable();
-            $table->foreign('pilgrim_details_id')->references('id')->on('pilgrim_details')->onDelete('cascade');
+            $table->unsignedBigInteger('address_id')->nullable();
+            $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');
         });
     }
 
@@ -23,8 +23,8 @@ return new class extends Migration
         Schema::table('pilgrims', function (Blueprint $table) {
             // Восстанавливаем поле address, если миграция откатывается
             $table->string('address')->nullable();
-            $table->dropForeign(['pilgrim_details_id']);
-            $table->dropColumn('pilgrim_details_id');
+            $table->dropForeign(['address_id']);
+            $table->dropColumn('address_id');
         });
     }
 };
