@@ -147,15 +147,15 @@
                     <td>{{ $pilgrim->pinfl }}</td>
                     <td>{{ $pilgrim->phone_number }}</td>
                     <td>{{
-                            $pilgrim->details->oblast->name .
+                            $pilgrim->address->oblast->name .
                             ', ' .
-                            $pilgrim->details->city->name .
+                            $pilgrim->address->city->name .
                             ', ' .
-                            $pilgrim->details->district->name .
+                            $pilgrim->address->district->name .
                             ', ' .
-                            $pilgrim->details->mahalla->name .
+                            $pilgrim->address->mahalla->name .
                             ', ' .
-                            $pilgrim->details->home
+                            $pilgrim->address->home
                         }}</td>
                     <td>
                         <!-- Здесь можно вставить кнопки: например, редактировать/удалить -->
