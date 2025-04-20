@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
+use App\Models\District;
+use App\Models\Mahalla;
+use App\Models\Oblast;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -21,7 +26,14 @@ class UserController extends Controller
     {
         $users = $this->user->paginate(10);
 
-        return view('users.index', compact('users'));
+        $roles = Role::all();
+
+        $oblasts = Oblast::all();
+        $mahallas = Mahalla::all();
+        $cities = City::all();
+        $districts = District::all();
+
+        return view('users.index', compact('users', 'roles', 'oblasts', 'mahallas', 'cities', 'districts'));
     }
 
     /**
@@ -61,7 +73,21 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if (!$user = User::find($id)) {
+            return redirect()->route('users.index');
+        }
+
+//        $user->update([
+//            'full_name' => $request->get('full_name'),
+//            'email' => $request->get('email'),
+//            'phone_number' => $request->get('phone_number'),
+//            'role_id' => $request->get('role_id'),
+//            'passport_data' => $request->get('passport_data'),
+//
+//        ]);
+        logger($request->all());
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -69,6 +95,11 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if (!$user = User::find($id)) {
+            return redirect()->route('users.index');
+        }
+
+        $user->delete();
+        return redirect()->route('users.index');
     }
 }
