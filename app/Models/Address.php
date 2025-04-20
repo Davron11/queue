@@ -4,14 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PilgrimDetail extends Model
+class Address extends Model
 {
     protected $fillable = ['oblast_id', 'city_id', 'district_id', 'mahalla_id', 'home'];
 
-    public function pilgrim()
-    {
-        return $this->hasOne('App\Models\Pilgrim');
-    }
     public function oblast()
     {
         return $this->belongsTo('App\Models\Oblast', 'oblast_id');
