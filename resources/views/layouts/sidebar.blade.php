@@ -22,5 +22,9 @@
     @endif
         <a href="{{ route('users.index') }}">Администраторы</a>
     <a href="{{ route('status') }}">Профиль</a>
-    <a href="#logout">Выход</a>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выход</a>
 </div>
+
+<form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+    @csrf
+</form>

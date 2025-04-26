@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Добавление жителя</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Rubik и Amiri -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Rubik', sans-serif;
             margin: 0;
             padding: 0;
         }
@@ -16,55 +19,48 @@
         body {
             display: flex;
             min-height: 100vh;
-            background-color: #f4f6f8;
-            color: #333;
+            background-color: #F5F5F5; /* Фон как в профиле */
+            color: #1A3C34; /* Основной цвет текста */
         }
 
+        /* Централизованный стиль сайдбара */
         .sidebar {
             width: 250px;
-            background-color: #1e3a8a;
-            color: #fff;
-            padding: 30px 20px;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            top: 0;
-            left: 0;
+            background-color: #1A3C34; /* Как в queue-info */
+            color: #FFFFFF;
             height: 100vh;
-            overflow-y: auto;
+            padding: 20px;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .sidebar h2 {
-            color: #fff;
-            font-size: 22px;
-            margin-bottom: 30px;
-            font-weight: 600;
+            font-family: 'Amiri', serif; /* Шрифт как в заголовках профиля */
+            color: #D4A017; /* Золотой акцент */
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
         }
 
         .sidebar a {
-            display: block;
-            color: #e0e7ff;
             text-decoration: none;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            transition: background-color 0.2s, color 0.2s;
-            font-size: 15px;
+            color: #F5F5F5; /* Светлый текст */
+            background: transparent; /* Убираем синий фон */
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s;
+            font-size: 1rem;
         }
 
         .sidebar a:hover {
-            background-color: #3b82f6;
-            color: white;
+            background: #D4A017; /* Золотой при наведении */
+            color: #1A3C34;
         }
 
-        .sidebar a.active {
-            background-color: #2563eb;
-            color: #fff;
-            font-weight: 600;
-        }
-
+        /* Контент */
         .main {
             margin-left: 250px;
             width: calc(100% - 250px);
@@ -79,61 +75,87 @@
             width: 100%;
             max-width: 700px;
             text-align: center;
+            background: #FFFFFF; /* Белый фон как в profile-card */
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Фоновый орнамент */
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('islamic-pattern.png') center/cover no-repeat;
+            opacity: 0.1;
+            z-index: 0;
         }
 
         h1 {
+            font-family: 'Amiri', serif; /* Шрифт как в профиле */
             font-size: 28px;
             margin-bottom: 30px;
-            color: #1e3a8a;
+            color: #D4A017; /* Золотой акцент */
+            position: relative;
+            z-index: 1;
         }
 
         form {
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background: transparent; /* Убираем белый фон формы */
+            padding: 0; /* Убираем внутренние отступы */
             text-align: left;
+            position: relative;
+            z-index: 1;
         }
 
         form label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #374151;
+            color: #1A3C34; /* Тёмный текст */
         }
 
         form input {
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
-            border: 1px solid #d1d5db;
+            border: 1px solid #D4A0175e; /* Светло-золотая рамка */
             border-radius: 8px;
             font-size: 14px;
-            transition: border 0.3s;
+            transition: border 0.3s, box-shadow 0.3s;
+            background: #F5F5F5; /* Фон как в user-info */
         }
 
         form input:focus {
             outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+            border-color: #D4A017; /* Полный золотой при фокусе */
+            box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.2);
         }
 
         form button {
             padding: 12px 25px;
-            background-color: #2563eb;
-            color: white;
+            background-color: #D4A017; /* Золотая кнопка */
+            color: #1A3C34;
             border: none;
             border-radius: 8px;
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.2s;
+            width: 100%;
         }
 
         form button:hover {
-            background-color: #1d4ed8;
+            background-color: #B8860B; /* Темнее золотого при наведении */
+            transform: translateY(-2px);
         }
 
+        /* Адаптивность */
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -152,11 +174,11 @@
             }
 
             .content {
-                padding-top: 20px;
+                padding: 20px;
             }
 
-            form {
-                width: 100%;
+            h1 {
+                font-size: 24px;
             }
         }
     </style>
@@ -195,7 +217,6 @@
 
             <button type="submit">Добавить</button>
         </form>
-
     </div>
 </div>
 

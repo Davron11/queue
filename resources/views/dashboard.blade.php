@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Панель администратора</title>
+    <!-- Google Fonts: Rubik и Amiri -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Общие стили */
         * {
@@ -15,16 +19,17 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            font-family: 'Rubik', sans-serif;
+            background: #F5F5F5; /* Фон как в профиле */
+            color: #1A3C34; /* Основной цвет текста */
             display: flex;
         }
 
         /* Сайдбар */
         .sidebar {
             width: 250px;
-            background-color: #343a40;
-            color: white;
+            background-color: #1A3C34; /* Как в queue-info */
+            color: #FFFFFF;
             height: 100vh;
             padding: 20px;
             position: fixed;
@@ -34,22 +39,27 @@
         }
 
         .sidebar h2 {
+            font-family: 'Amiri', serif; /* Шрифт как в заголовках профиля */
+            color: #D4A017; /* Золотой акцент */
             text-align: center;
             margin-bottom: 20px;
+            font-size: 1.8rem;
         }
 
         .sidebar a {
             text-decoration: none;
-            color: white;
-            background: #007bff;
+            color: #F5F5F5; /* Светлый текст */
+            background: transparent; /* Убираем синий фон */
             padding: 10px;
             text-align: center;
             border-radius: 5px;
-            transition: background 0.2s;
+            transition: background 0.3s, color 0.3s;
+            font-size: 1rem;
         }
 
         .sidebar a:hover {
-            background: #0056b3;
+            background: #D4A017; /* Золотой при наведении */
+            color: #1A3C34;
         }
 
         /* Контент */
@@ -60,8 +70,10 @@
         }
 
         h1 {
-            color: #333;
+            font-family: 'Amiri', serif; /* Шрифт как в профиле */
+            color: #D4A017; /* Золотой акцент */
             margin-bottom: 20px;
+            font-size: 2rem;
         }
 
         /* Карточки */
@@ -72,13 +84,28 @@
         }
 
         .card {
-            background: white;
+            background: #FFFFFF; /* Белый фон как в profile-card */
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px; /* Закругления как в профиле */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Тень */
             width: 250px;
             text-align: center;
-            transition: transform 0.2s;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Фоновый орнамент для карточек */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('islamic-pattern.png') center/cover no-repeat;
+            opacity: 0.1;
+            z-index: 0;
         }
 
         .card:hover {
@@ -86,19 +113,59 @@
         }
 
         .card h3 {
-            color: #007bff;
+            font-family: 'Amiri', serif;
+            color: #D4A017; /* Золотой акцент */
             margin-bottom: 10px;
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 1;
         }
 
         .card p {
-            color: #333;
+            color: #1A3C34; /* Тёмный текст */
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card p span {
+            font-weight: 600;
+            color: #D4A017; /* Золотой для чисел */
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
         }
     </style>
 </head>
 
 <body>
 <!-- Сайдбар -->
-<div class="sidebar">
+{{--<div class="sidebar">
     <h2>Админ Панель</h2>
     <a href="{{ route('add') }}">Добавить жителя</a>
     @if(!in_array($user->role->slug, ['users']))
@@ -122,9 +189,8 @@
         @csrf
     </form>
     <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Выход</a>
-
-</div>
-
+</div>--}}
+@include('layouts/sidebar')
 <!-- Контент -->
 <div class="content">
     <h1>Добро пожаловать, {{ $user->full_name }}!</h1>
