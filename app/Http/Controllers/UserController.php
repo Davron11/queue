@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\City;
 use App\Models\District;
 use App\Models\Mahalla;
@@ -71,23 +72,33 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
-        if (!$user = User::find($id)) {
-            return redirect()->route('users.index');
+        // Поиск пользователя по ID
+        $user = User::findOrFail($id);
+
+        // Валидация данных
+        $validated = $request->validated();
+
+        // Обновление данных пользователя
+        $user->update([
+            'full_name' => $validated['full_name'],
+            'pinfl' => $validated['pinfl'],
+            'phone_number' => $validated['phone_number'],
+            'role_id' => $validated['role_id'],
+            'passport_series' => $validated['passport_series'] ?? null,
+            'passport_number' => $validated['passport_number'] ?? null,
+            'password' => $validated['password'] ? bcrypt($validated['password']) : $user->password,
+        ]);
+
+        if (isset($validated['address'])) {
+            $user->address()->updateOrCreate(
+                ['user_id' => $user->id],
+                $validated['address']
+            );
         }
 
-//        $user->update([
-//            'full_name' => $request->get('full_name'),
-//            'email' => $request->get('email'),
-//            'phone_number' => $request->get('phone_number'),
-//            'role_id' => $request->get('role_id'),
-//            'passport_data' => $request->get('passport_data'),
-//
-//        ]);
-        logger($request->all());
-
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'Пользователь успешно обновлен.');
     }
 
     /**

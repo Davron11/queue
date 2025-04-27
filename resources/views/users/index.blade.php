@@ -244,7 +244,23 @@
                     <td>
                         <!-- Здесь можно вставить кнопки: например, редактировать/удалить -->
                         <a href="#" class="btn btn-sm btn-primary"
-                           onclick="openEditModal({{ $user->id }}, '{{ $user->full_name }}', '{{ $user->pinfl }}', '{{ $user->phone_number }}', '{{ $user->address }}')">
+                           data-user=' {{json_encode([
+                               "id" => $user->id,
+                               "full_name" => $user->full_name,
+                               "pinfl" => $user->pinfl,
+                               "phone_number" => $user->phone_number,
+                               "address" => [
+                                   "oblast_id" => $user->address->oblast_id ?? '',
+                                   "city_id" => $user->address->city_id ?? '',
+                                   "district_id" => $user->address->district_id ?? '',
+                                   "mahalla_id" => $user->address->mahalla_id ?? '',
+                                   "home" => $user->address->home ?? ''
+                               ],
+                               "passport_series" => $user->passport_data ?? '',
+                               "passport_number" => $user->passport_number ?? '',
+                               "role_id" => $user->role_id ?? ''
+                           ])}}'
+                           onclick="openEditModal(this)">
                             Редактировать
                         </a>
                         <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
@@ -282,13 +298,34 @@
                 <input type="text" name="phone_number" id="edit_phone_number" value="{{ old('phone_number', $user->phone_number) }}" required>
             </div>
 
+            <div>
+                <label>Серия паспорта</label>
+                <input type="text" name="passport_series" id="edit_passport_series" value="{{ old('passport_series', $user->passport_series ?? '') }}" required>
+            </div>
+
+            <div>
+                <label>Роль</label>
+                <select name="role_id" id="edit_role_id" required>
+                    @foreach($roles as $role)
+                        <option value="{{ $role->id }}" {{ old('role_id', $user->role_id ?? '') == $role->id ? 'selected' : '' }}>
+                            {{ $role->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label>Новый пароль</label>
+                <input type="password" name="password" id="edit_password" placeholder="Введите новый пароль">
+            </div>
+
             <!-- Новые поля -->
             <div>
                 <label>Область</label>
                 <select name="oblast_id" id="edit_oblast_id" required>
                     <option value="">Выберите область</option>
                     @foreach($oblasts as $oblast)
-                        <option value="{{ $oblast->id }}" {{ old('oblast_id', $user->oblast_id) == $oblast->id ? 'selected' : '' }}>
+                        <option value="{{ $oblast->id }}" {{ old('oblast_id', $user->address->oblast_id ?? '') == $oblast->id ? 'selected' : '' }}>
                             {{ $oblast->name }}
                         </option>
                     @endforeach
@@ -299,7 +336,7 @@
                 <label>Город</label>
                 <select name="city_id" id="edit_city_id" required>
                     @foreach($cities as $city)
-                        <option value="{{ $city->id }}" {{ old('city_id', $user->address->city_id) == $city->id ? 'selected' : '' }}>
+                        <option value="{{ $city->id }}" {{ old('city_id', $user->address->city_id ?? '') == $city->id ? 'selected' : '' }}>
                             {{ $city->name }}
                         </option>
                     @endforeach
@@ -310,7 +347,7 @@
                 <label>Район</label>
                 <select name="district_id" id="edit_district_id" required>
                     @foreach($districts as $district)
-                        <option value="{{ $district->id }}" {{ old('district_id', $user->address->district_id) == $district->id ? 'selected' : '' }}>
+                        <option value="{{ $district->id }}" {{ old('district_id', $user->address->district_id ?? '') == $district->id ? 'selected' : '' }}>
                             {{ $district->name }}
                         </option>
                     @endforeach
@@ -321,7 +358,7 @@
                 <label>Махалла</label>
                 <select name="mahalla_id" id="edit_mahalla_id" required>
                     @foreach($mahallas as $mahalla)
-                        <option value="{{ $mahalla->id }}" {{ old('mahalla_id', $user->address->mahalla_id) == $mahalla->id ? 'selected' : '' }}>
+                        <option value="{{ $mahalla->id }}" {{ old('mahalla_id', $user->address->mahalla_id ?? '') == $mahalla->id ? 'selected' : '' }}>
                             {{ $mahalla->name }}
                         </option>
                     @endforeach
@@ -330,7 +367,7 @@
 
             <div>
                 <label>Дом</label>
-                <input type="text" name="home" id="edit_home" value="{{ old('home', $user->address->home) }}" required>
+                <input type="text" name="home" id="edit_home" value="{{ old('home', $user->address->home ?? '') }}" required>
             </div>
 
             <button type="submit" class="btn btn-success">Сохранить</button>
@@ -340,47 +377,29 @@
 </div>
 
 <script>
-    // Функция для открытия модалки редактирования
-    function openEditModal(id, fullName, pinfl, phoneNumber, address, oblastId, cityId, districtId, mahallaId, home) {
+    function openEditModal(element) {
+        const userData = JSON.parse(element.getAttribute('data-user'));
+
         const form = document.getElementById('editForm');
-        form.action = `/users/${id}`; // маршрут обновления
+        form.action = `/users/${userData.id}`;
 
-        document.getElementById('edit_full_name').value = fullName;
-        document.getElementById('edit_pinfl').value = pinfl;
-        document.getElementById('edit_phone_number').value = phoneNumber;
-        document.getElementById('edit_home').value = home;
+        document.getElementById('edit_full_name').value = userData.full_name;
+        document.getElementById('edit_pinfl').value = userData.pinfl;
+        document.getElementById('edit_phone_number').value = userData.phone_number;
+        document.getElementById('edit_home').value = userData.address.home;
 
-        // Устанавливаем выбранные значения для селекторов
-        document.getElementById('edit_oblast_id').value = oblastId;
-        document.getElementById('edit_city_id').value = cityId;
-        document.getElementById('edit_district_id').value = districtId;
-        document.getElementById('edit_mahalla_id').value = mahallaId;
+        document.getElementById('edit_oblast_id').value = userData.address.oblast_id;
+        document.getElementById('edit_city_id').value = userData.address.city_id;
+        document.getElementById('edit_district_id').value = userData.address.district_id;
+        document.getElementById('edit_mahalla_id').value = userData.address.mahalla_id;
 
-        // Если нужно, добавьте здесь логику для динамической загрузки данных городов, районов и махалл
-        // через AJAX в зависимости от выбранной области, города и т.д.
+        document.getElementById('edit_passport_series').value = userData.passport_series;
+        document.getElementById('edit_role_id').value = userData.role_id;
+
+        // Очистка поля пароля
+        document.getElementById('edit_password').value = '';
 
         document.getElementById('editModal').style.display = 'block';
-    }
-
-    // Функция для открытия модалки удаления
-    function openDeleteModal(actionUrl) {
-        document.getElementById('deleteForm').action = actionUrl;
-        document.getElementById('deleteModal').style.display = 'block';
-    }
-
-    // Функция для закрытия модалки
-    function closeModal(id) {
-        document.getElementById(id).style.display = 'none';
-    }
-
-    // Закрытие модалки при клике вне её
-    window.onclick = function(event) {
-        ['editModal', 'deleteModal'].forEach(modalId => {
-            let modal = document.getElementById(modalId);
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        });
     }
 </script>
 </body>
