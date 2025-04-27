@@ -4,7 +4,7 @@
 <div class="sidebar">
     <h2>Меню</h2>
     <a href="{{ route('dashboard') }}">Панель
-    <a href="{{ route('add') }}">Добавить жителя</a>
+
     <a href="{{ route('pilgrims.index') }}">Очередь</a>
     @if(in_array($user->role->slug, ['root_admin']))
         <a href="{{ route('states.index') }}">Регионы</a>
