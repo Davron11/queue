@@ -314,4 +314,73 @@
 
                     <div class="col-md-6">
                         <label for="editFullName" class="form-label">Название</label>
-                        <input type="text" class="form-control" name="name" id="editName
+                        <input type="text" class="form-control" name="name" id="editName" required>
+                    </div>
+
+                    {{--<div class="col-md-6">
+                        <label for="editOblast" class="form-label">Область</label>
+                        <select name="oblast_id" id="editOblast" class="form-select" required>
+                            @foreach($oblasts as $oblast)
+                                <option value="{{ $oblast->id }}">{{ $oblast->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="editCity" class="form-label">Город</label>
+                        <select name="city_id" id="editCity" class="form-select" required>
+                            @foreach($cities as $city)
+                                <option value="{{ $city->id }}">{{ $city->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="editDistrict" class="form-label">Район</label>
+                        <select name="district_id" id="editDistrict" class="form-select" required>
+                            @foreach($districts as $district)
+                                <option value="{{ $district->id }}">{{ $district->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="editMahalla" class="form-label">Махалля</label>
+                        <select name="mahalla_id" id="editMahalla" class="form-select" required>
+                            @foreach($mahallas as $mahalla)
+                                <option value="{{ $mahalla->id }}">{{ $mahalla->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>--}}
+                </div>
+                <div class="modal-footer mt-3">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('editPilgrimModal');
+        const form = document.getElementById('editPilgrimForm');
+
+        document.querySelectorAll('.editBtn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                console.log(this.dataset)
+                const id = this.dataset.id;
+                const name = this.dataset.name;
+                const actionUrl = this.dataset.url;
+
+                // Заполняем форму
+                form.action = actionUrl;
+                document.getElementById('editId').value = id;
+                document.getElementById('editName').value = name;
+            });
+        });
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
