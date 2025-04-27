@@ -8,18 +8,6 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::get('/new-villager', function () {
-    return view('new_villager');
-})->name('new_villager');
-
-Route::get('/queue', function () {
-    return view('queue');
-})->name('queue');
-
-Route::get('/add', function () {
-    return view('admin.add_user');
-})->name('add');
-
 Route::get('/status', function () {
     return view('users.status');
 })->name('status');
@@ -32,8 +20,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::group([], function () {
+    Route::get('/pilgrims/confirmedList', [\App\Http\Controllers\PilgrimController::class, 'confirmedList'])->name('pilgrims.confirmedList');
+    Route::post('/pilgrims/addConfirm', [\App\Http\Controllers\PilgrimController::class, 'addConfirm'])->name('pilgrims.addConfirm');
+    Route::post('/pilgrims/return/{id}', [\App\Http\Controllers\PilgrimController::class, 'returnWaiting'])->name('pilgrims.return');
+    Route::post('/pilgrims/complete', [\App\Http\Controllers\PilgrimController::class, 'completeConfirms'])->name('pilgrims.complete');
+    Route::resource('pilgrims', \App\Http\Controllers\PilgrimController::class);
+});
 Route::resource('users', UserController::class);
-Route::resource('pilgrims', \App\Http\Controllers\PilgrimController::class);
+
 Route::resource('states', \App\Http\Controllers\StateController::class);
 Route::resource('cities', \App\Http\Controllers\CityController::class);
 Route::resource('districts', \App\Http\Controllers\DistrictController::class);
