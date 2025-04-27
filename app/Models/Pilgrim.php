@@ -23,8 +23,8 @@ class Pilgrim extends Authenticatable
         'password'
     ];
 
-    public function details()
+    public function address()
     {
-        return $this->belongsTo('App\Models\PilgrimDetail', 'pilgrim_details_id','id');
+        return $this->belongsTo('App\Models\Address', 'address_id','id');
     }
 }

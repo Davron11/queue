@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('pilgrim_details', function (Blueprint $table) {
+        Schema::create('addresses', function (Blueprint $table) {
             $table->id();  // ID для таблицы
             $table->unsignedBigInteger('oblast_id');  // Ссылка на ID области
             $table->unsignedBigInteger('city_id');    // Ссылка на ID города
@@ -27,6 +27,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('pilgrim_details');
+        Schema::dropIfExists('addresses');
     }
 };

@@ -21,11 +21,11 @@ class PilgrimController extends Controller
     {
         $pilgrims = $this->pilgrim
             ->with([
-                'details',
-                'details.oblast:id,name',
-                'details.city:id,name',
-                'details.district:id,name',
-                'details.mahalla:id,name',
+                'address',
+                'address.oblast:id,name',
+                'address.city:id,name',
+                'address.district:id,name',
+                'address.mahalla:id,name',
             ])
             ->paginate(10);
 

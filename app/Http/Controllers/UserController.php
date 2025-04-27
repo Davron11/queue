@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
+use App\Models\City;
+use App\Models\District;
+use App\Models\Mahalla;
+use App\Models\Oblast;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -21,7 +27,14 @@ class UserController extends Controller
     {
         $users = $this->user->paginate(10);
 
-        return view('users.index', compact('users'));
+        $roles = Role::all();
+
+        $oblasts = Oblast::all();
+        $mahallas = Mahalla::all();
+        $cities = City::all();
+        $districts = District::all();
+
+        return view('users.index', compact('users', 'roles', 'oblasts', 'mahallas', 'cities', 'districts'));
     }
 
     /**
@@ -59,9 +72,33 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
-        //
+        // Поиск пользователя по ID
+        $user = User::findOrFail($id);
+
+        // Валидация данных
+        $validated = $request->validated();
+
+        // Обновление данных пользователя
+        $user->update([
+            'full_name' => $validated['full_name'],
+            'pinfl' => $validated['pinfl'],
+            'phone_number' => $validated['phone_number'],
+            'role_id' => $validated['role_id'],
+            'passport_series' => $validated['passport_series'] ?? null,
+            'passport_number' => $validated['passport_number'] ?? null,
+            'password' => $validated['password'] ? bcrypt($validated['password']) : $user->password,
+        ]);
+
+        if (isset($validated['address'])) {
+            $user->address()->updateOrCreate(
+                ['user_id' => $user->id],
+                $validated['address']
+            );
+        }
+
+        return redirect()->route('users.index')->with('success', 'Пользователь успешно обновлен.');
     }
 
     /**
@@ -69,6 +106,11 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if (!$user = User::find($id)) {
+            return redirect()->route('users.index');
+        }
+
+        $user->delete();
+        return redirect()->route('users.index');
     }
 }

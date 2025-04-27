@@ -280,22 +280,22 @@ logger($user)
         </tr>
         </thead>
         <tbody id="queueList">
-        @foreach($pilgrims as $index => $pilgrim)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $pilgrim->full_name }}</td>
-                <td>{{ $pilgrim->pinfl }}</td>
-                <td>{{ $pilgrim->phone_number }}</td>
-                <td>{{
-                            $pilgrim->details->oblast->name .
+            @foreach($pilgrims as $index => $pilgrim)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $pilgrim->full_name }}</td>
+                    <td>{{ $pilgrim->pinfl }}</td>
+                    <td>{{ $pilgrim->phone_number }}</td>
+                    <td>{{
+                            $pilgrim->address->oblast->name .
                             ', ' .
-                            $pilgrim->details->city->name .
+                            $pilgrim->address->city->name .
                             ', ' .
-                            $pilgrim->details->district->name .
+                            $pilgrim->address->district->name .
                             ', ' .
-                            $pilgrim->details->mahalla->name .
+                            $pilgrim->address->mahalla->name .
                             ', ' .
-                            $pilgrim->details->home
+                            $pilgrim->address->home
                         }}</td>
                 <td>
                     <!-- Здесь можно вставить кнопки: например, редактировать/удалить -->
