@@ -16,7 +16,18 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        .content {
+            width: 100%;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between; /* Размещение элементов с максимальным расстоянием между ними */
+            align-items: center; /* Центрируем элементы по вертикали */
+            margin-bottom: 10px; /* Добавим небольшой отступ снизу */
+        }
+        h1 {
+            margin: 0; /* Убираем стандартные отступы */
+        }
         body {
             font-family: 'Rubik', sans-serif;
             background: #F5F5F5; /* Фон как в профиле */
@@ -302,7 +313,12 @@
 
 <!-- Контент -->
 <div class="content">
-    <h1>Очередь</h1>
+    <div class="header">
+        <h1>Очередь</h1>
+        <a href="#" class="btn btn-sm btn-primary" onclick="openEditModal(this)">
+            Создать
+        </a>
+    </div>
     <table class="queue-table">
         <thead>
         <tr>
@@ -321,7 +337,16 @@
                     <td>{{ $user->full_name }}</td>
                     <td>{{ $user->pinfl }}</td>
                     <td>{{ $user->phone_number }}</td>
-                    <td>{{ $user->address }}</td>
+                    <td>{{
+                            $user->address ? (
+                                $user->address->oblast->name . ' ' .
+                                $user->address->city->name . ' ' .
+                                $user->address->oblast->name . ' ' .
+                                $user->address->mahalla->name . ' ' .
+                                $user->address->home
+                            ) : ''
+
+                    }}</td>
                     <td>
                         <!-- Здесь можно вставить кнопки: например, редактировать/удалить -->
                         <a href="#" class="btn btn-sm btn-primary"
@@ -462,25 +487,66 @@
         const userData = JSON.parse(element.getAttribute('data-user'));
 
         const form = document.getElementById('editForm');
-        form.action = `/users/${userData.id}`;
+        const modal = document.getElementById('editModal');
+        console.log(userData)
+        // Если userData.id пустой, это значит, что мы создаём нового пользователя
+        if (!userData) {
+            // Для создания нового пользователя форма должна использовать POST
+            form.action = '/users'; // Или route('users.store') для использования с именованным маршрутом
+            form.method = 'POST';
 
-        document.getElementById('edit_full_name').value = userData.full_name;
-        document.getElementById('edit_pinfl').value = userData.pinfl;
-        document.getElementById('edit_phone_number').value = userData.phone_number;
-        document.getElementById('edit_home').value = userData.address.home;
+            // Очистка всех полей формы для создания
+            document.getElementById('edit_full_name').value = '';
+            document.getElementById('edit_pinfl').value = '';
+            document.getElementById('edit_phone_number').value = '';
+            document.getElementById('edit_home').value = '';
+            document.getElementById('edit_oblast_id').value = '';
+            document.getElementById('edit_city_id').value = '';
+            document.getElementById('edit_district_id').value = '';
+            document.getElementById('edit_mahalla_id').value = '';
+            document.getElementById('edit_passport_series').value = '';
+            document.getElementById('edit_role_id').value = '';
 
-        document.getElementById('edit_oblast_id').value = userData.address.oblast_id;
-        document.getElementById('edit_city_id').value = userData.address.city_id;
-        document.getElementById('edit_district_id').value = userData.address.district_id;
-        document.getElementById('edit_mahalla_id').value = userData.address.mahalla_id;
+            // Очистка поля пароля
+            document.getElementById('edit_password').value = '';
 
-        document.getElementById('edit_passport_series').value = userData.passport_series;
-        document.getElementById('edit_role_id').value = userData.role_id;
+            // Убираем скрытое поле для метода PUT
+            const methodField = form.querySelector('[name="_method"]');
+            if (methodField) {
+                methodField.remove();
+            }
+        } else {
+            // Если id есть, это значит, что мы редактируем существующего пользователя
+            form.action = `/users/${userData.id}`; // Или route('users.update', userData.id)
+            form.method = 'POST'; // Метод по умолчанию
 
-        // Очистка поля пароля
-        document.getElementById('edit_password').value = '';
+            // Добавляем скрытое поле _method с PUT
+            if (!form.querySelector('[name="_method"]')) {
+                const methodField = document.createElement('input');
+                methodField.type = 'hidden';
+                methodField.name = '_method';
+                methodField.value = 'PUT';
+                form.appendChild(methodField);
+            }
 
-        document.getElementById('editModal').style.display = 'block';
+            // Заполняем форму данными пользователя
+            document.getElementById('edit_full_name').value = userData.full_name;
+            document.getElementById('edit_pinfl').value = userData.pinfl;
+            document.getElementById('edit_phone_number').value = userData.phone_number;
+            document.getElementById('edit_home').value = userData.address.home;
+            document.getElementById('edit_oblast_id').value = userData.address.oblast_id;
+            document.getElementById('edit_city_id').value = userData.address.city_id;
+            document.getElementById('edit_district_id').value = userData.address.district_id;
+            document.getElementById('edit_mahalla_id').value = userData.address.mahalla_id;
+            document.getElementById('edit_passport_series').value = userData.passport_series;
+            document.getElementById('edit_role_id').value = userData.role_id;
+        }
+
+        // Открываем модалку
+        modal.style.display = 'block';
+    }
+    function closeModal() {
+        document.getElementById('editModal').style.display = 'none';
     }
 </script>
 </body>

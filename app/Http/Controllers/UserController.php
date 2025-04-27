@@ -9,23 +9,32 @@ use App\Models\Mahalla;
 use App\Models\Oblast;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
 
     private $user;
+    private $userService;
 
-    public function __construct(User $user)
+    public function __construct(User $user, UserService $userService)
     {
         $this->user = $user;
+        $this->userService = $userService;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = $this->user->paginate(10);
+        $users = $this->user->with([
+            'address',
+            'address.oblast',
+            'address.city',
+            'address.district',
+            'address.mahalla',
+        ])->paginate(10);
 
         $roles = Role::all();
 
@@ -50,7 +59,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = $this->user;
+
+        $this->userService->fillingUser($user, $request);
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -74,31 +87,11 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, string $id)
     {
-        // Поиск пользователя по ID
-        $user = User::findOrFail($id);
-
-        // Валидация данных
-        $validated = $request->validated();
-
+        $user = User::with('address')->findOrFail($id);
         // Обновление данных пользователя
-        $user->update([
-            'full_name' => $validated['full_name'],
-            'pinfl' => $validated['pinfl'],
-            'phone_number' => $validated['phone_number'],
-            'role_id' => $validated['role_id'],
-            'passport_series' => $validated['passport_series'] ?? null,
-            'passport_number' => $validated['passport_number'] ?? null,
-            'password' => $validated['password'] ? bcrypt($validated['password']) : $user->password,
-        ]);
+        $this->userService->fillingUser($user, $request);
 
-        if (isset($validated['address'])) {
-            $user->address()->updateOrCreate(
-                ['user_id' => $user->id],
-                $validated['address']
-            );
-        }
-
-        return redirect()->route('users.index')->with('success', 'Пользователь успешно обновлен.');
+        return redirect()->route('users.index');
     }
 
     /**

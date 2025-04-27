@@ -23,6 +23,7 @@ class User extends Authenticatable
         'phone_number',
         'address',
         'passport_data',
+        'role_id',
         'pinfl',
         'email',
         'photo_path',
@@ -54,6 +55,11 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'address_id', 'id');
     }
 }
 
