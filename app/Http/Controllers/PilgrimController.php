@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
+use App\Models\District;
+use App\Models\Mahalla;
+use App\Models\Oblast;
 use App\Models\Pilgrim;
+use App\Services\PilgrimService;
 use Illuminate\Http\Request;
 
 class PilgrimController extends Controller
 {
 
     private $pilgrim;
+    private $pilgrimService;
 
-    public function __construct(Pilgrim $pilgrim)
+    public function __construct(Pilgrim $pilgrim, PilgrimService $pilgrimService)
     {
         $this->pilgrim = $pilgrim;
+        $this->pilgrimService = $pilgrimService;
     }
     /**
      * Display a listing of the resource.
@@ -29,7 +36,12 @@ class PilgrimController extends Controller
             ])
             ->paginate(10);
 
-        return view('pilgrims.index', compact('pilgrims'));
+        $oblasts = Oblast::all();
+        $mahallas = Mahalla::all();
+        $cities = City::all();
+        $districts = District::all();
+
+        return view('pilgrims.index', compact('pilgrims', 'oblasts', 'mahallas', 'cities', 'districts'));
     }
 
     /**
@@ -45,7 +57,11 @@ class PilgrimController extends Controller
      */
     public function store(Request $request)
     {
-        logger('store');
+        $pilgrim = $this->pilgrim;
+
+        $this->pilgrimService->fillingPilgrim($pilgrim, $request);
+
+        return redirect()->route('pilgrims.index');
     }
 
     /**
@@ -69,13 +85,9 @@ class PilgrimController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $pilgrim = $this->pilgrim->find($request->pilgrim_id);
-
-        $pilgrim->update([
-            'full_name' => $request->full_name,
-            'pinfl' => $request->pinfl,
-            'phone_number' => $request->phone_number,
-        ]);
+        $user = Pilgrim::with('address')->findOrFail($id);
+        // Обновление данных пользователя
+        $this->pilgrimService->fillingPilgrim($user, $request);
 
         return redirect()->route('pilgrims.index');
     }

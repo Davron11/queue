@@ -2,27 +2,25 @@
 
 namespace App\Services;
 
-use App\Models\User;
+use App\Models\Pilgrim;
 use Illuminate\Http\Request;
 
-class UserService
+class PilgrimService
 {
-
     /**
      * @param User $user
      * @param Request $request
      */
-    public function fillingUser(User $user, Request $request)
+    public function fillingPilgrim(Pilgrim $pilgrim, Request $request)
     {
-        $user->fill([
+        $pilgrim->fill([
             'full_name' => $request['full_name'],
             'pinfl' => $request['pinfl'],
             'phone_number' => $request['phone_number'],
-            'role_id' => $request['role_id'],
             'passport_data' => $request['passport_series'] ?? null,
-            'password' => $request['password'] ? bcrypt($request['password']) : $user->password,
+            'password' => $request['password'] ? bcrypt($request['password']) : $pilgrim->password,
         ]);
 
-        $user->save();
+        $pilgrim->save();
     }
 }

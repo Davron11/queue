@@ -30,10 +30,10 @@ class UserController extends Controller
     {
         $users = $this->user->with([
             'address',
-            'address.oblast',
-            'address.city',
-            'address.district',
-            'address.mahalla',
+            'address.oblast:id,name',
+            'address.city:id,name',
+            'address.district:id,name',
+            'address.mahalla:id,name',
         ])->paginate(10);
 
         $roles = Role::all();

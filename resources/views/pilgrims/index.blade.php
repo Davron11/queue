@@ -19,6 +19,13 @@
             box-sizing: border-box;
         }
 
+        .header {
+            display: flex;
+            justify-content: space-between; /* Размещение элементов с максимальным расстоянием между ними */
+            align-items: center; /* Центрируем элементы по вертикали */
+            margin-bottom: 10px; /* Добавим небольшой отступ снизу */
+        }
+
         body {
             font-family: 'Rubik', sans-serif;
             background: #F5F5F5; /* Фон как в профиле */
@@ -155,43 +162,74 @@
 
         /* Модальное окно */
         .modal-content {
-            background: #FFFFFF; /* Белый фон */
-            border-radius: 15px; /* Закругления как в профиле */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 30px 40px;
+            border-radius: 12px;
+            width: 500px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
             position: relative;
-            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        .modal-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .modal-content h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .modal-content input[type="text"] {
             width: 100%;
-            height: 100%;
-            background: url('islamic-pattern.png') center/cover no-repeat;
-            opacity: 0.1;
-            z-index: 0;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border 0.3s ease;
         }
 
-        .modal-header {
-            background: #1A3C34; /* Как в queue-info */
-            color: #FFFFFF;
-            border-bottom: none;
-            position: relative;
-            z-index: 1;
+        .modal-content input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
         }
 
-        .modal-title {
-            font-family: 'Amiri', serif;
-            color: #D4A017; /* Золотой акцент */
-            font-size: 1.5rem;
+        .modal-content button {
+            padding: 10px 18px;
+            margin-top: 10px;
+            margin-right: 10px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
         }
 
-        .modal-body {
-            background: #F5F5F5; /* Фон как в user-info */
-            position: relative;
-            z-index: 1;
+        .modal-content .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .modal-content .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .modal-content .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .modal-content .btn-secondary:hover {
+            background-color: #5a6268;
         }
 
         .form-label {
@@ -260,14 +298,18 @@
 <body>
 <?php
 $user = \Illuminate\Support\Facades\Auth::user();
-logger($user)
 ?>
     <!-- Сайдбар -->
 @include('layouts.sidebar')
 
 <!-- Контент -->
 <div class="content">
-    <h1>Очередь</h1>
+    <div class="header">
+        <h1>Очередь</h1>
+        <a href="#" class="btn btn-sm btn-primary" onclick="openEditModal(this)">
+            Создать
+        </a>
+    </div>
     <table class="queue-table">
         <thead>
         <tr>
@@ -297,129 +339,190 @@ logger($user)
                             ', ' .
                             $pilgrim->address->home
                         }}</td>
-                <td>
-                    <!-- Здесь можно вставить кнопки: например, редактировать/удалить -->
-                    <a href="#"
-                       class="btn btn-sm btn-primary editBtn"
-                       data-id="{{ $pilgrim->id }}"
-                       data-full_name="{{ $pilgrim->full_name }}"
-                       data-pinfl="{{ $pilgrim->pinfl }}"
-                       data-phone="{{ $pilgrim->phone_number }}"
-                       data-url="{{ route('pilgrims.update', $pilgrim->id) }}"
-                       data-bs-toggle="modal"
-                       data-bs-target="#editPilgrimModal">
-                        Редактировать
-                    </a>
-                    <form action="{{ route('pilgrims.destroy', $pilgrim->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
-                    </form>
-                </td>
+                    <td>
+                        <!-- Здесь можно вставить кнопки: например, редактировать/удалить -->
+                        <a href="#" class="btn btn-sm btn-primary"
+                           data-user=' {{json_encode([
+                                   "id" => $pilgrim->id,
+                                   "full_name" => $pilgrim->full_name,
+                                   "pinfl" => $pilgrim->pinfl,
+                                   "phone_number" => $pilgrim->phone_number,
+                                   "address" => [
+                                       "oblast_id" => $pilgrim->address->oblast_id ?? '',
+                                       "city_id" => $pilgrim->address->city_id ?? '',
+                                       "district_id" => $pilgrim->address->district_id ?? '',
+                                       "mahalla_id" => $pilgrim->address->mahalla_id ?? '',
+                                       "home" => $pilgrim->address->home ?? ''
+                                   ],
+                                   "passport_series" => $pilgrim->passport_data ?? '',
+                                   "passport_number" => $pilgrim->passport_number ?? '',
+                               ])}}'
+                           onclick="openEditModal(this)">
+                            Редактировать
+                        </a>
+                        <form action="{{ route('pilgrims.destroy', $pilgrim->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                        </form>
+                    </td>
             </tr>
         @endforeach
         </tbody>
     </table>
 </div>
-<div class="modal fade" id="editPilgrimModal" tabindex="-1" aria-labelledby="editPilgrimModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <form id="editPilgrimForm" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editPilgrimModalLabel">Редактировать паломника</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-                </div>
-                <div class="modal-body row g-3">
-                    <input type="hidden" name="pilgrim_id" id="editPilgrimId">
+<div id="editModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h2>Редактировать жителя</h2>
+        <form id="editForm" method="POST">
+            @csrf
+            @method('PUT')
 
-                    <div class="col-md-6">
-                        <label for="editFullName" class="form-label">ФИО</label>
-                        <input type="text" class="form-control" name="full_name" id="editFullName" required>
-                    </div>
+            <div>
+                <label>ФИО</label>
+                <input type="text" name="full_name" id="edit_full_name" value="{{ old('full_name', $user->full_name) }}" required>
+            </div>
 
-                    <div class="col-md-6">
-                        <label for="editPinfl" class="form-label">ПИНФЛ</label>
-                        <input type="text" class="form-control" name="pinfl" id="editPinfl" required>
-                    </div>
+            <div>
+                <label>ПИНФЛ</label>
+                <input type="text" name="pinfl" id="edit_pinfl" value="{{ old('pinfl', $user->pinfl) }}" required>
+            </div>
 
-                    <div class="col-md-6">
-                        <label for="editPhone" class="form-label">Телефон</label>
-                        <input type="text" class="form-control" name="phone_number" id="editPhone" required>
-                    </div>
+            <div>
+                <label>Номер телефона</label>
+                <input type="text" name="phone_number" id="edit_phone_number" value="{{ old('phone_number', $user->phone_number) }}" required>
+            </div>
 
-                    <div class="col-md-6">
-                        <label for="editHome" class="form-label">Дом</label>
-                        <input type="text" class="form-control" name="home" id="editHome" required>
-                    </div>
+            <div>
+                <label>Серия паспорта</label>
+                <input type="text" name="passport_series" id="edit_passport_series" value="{{ old('passport_series', $user->passport_series ?? '') }}" required>
+            </div>
 
-                    {{--<div class="col-md-6">
-                        <label for="editOblast" class="form-label">Область</label>
-                        <select name="oblast_id" id="editOblast" class="form-select" required>
-                            @foreach($oblasts as $oblast)
-                                <option value="{{ $oblast->id }}">{{ $oblast->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+            <div>
+                <label>Новый пароль</label>
+                <input type="password" name="password" id="edit_password" placeholder="Введите новый пароль">
+            </div>
 
-                    <div class="col-md-6">
-                        <label for="editCity" class="form-label">Город</label>
-                        <select name="city_id" id="editCity" class="form-select" required>
-                            @foreach($cities as $city)
-                                <option value="{{ $city->id }}">{{ $city->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+            <!-- Новые поля -->
+            <div>
+                <label>Область</label>
+                <select name="oblast_id" id="edit_oblast_id" required>
+                    <option value="">Выберите область</option>
+                    @foreach($oblasts as $oblast)
+                        <option value="{{ $oblast->id }}" {{ old('oblast_id', $user->address->oblast_id ?? '') == $oblast->id ? 'selected' : '' }}>
+                            {{ $oblast->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-                    <div class="col-md-6">
-                        <label for="editDistrict" class="form-label">Район</label>
-                        <select name="district_id" id="editDistrict" class="form-select" required>
-                            @foreach($districts as $district)
-                                <option value="{{ $district->id }}">{{ $district->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+            <div>
+                <label>Город</label>
+                <select name="city_id" id="edit_city_id" required>
+                    @foreach($cities as $city)
+                        <option value="{{ $city->id }}" {{ old('city_id', $user->address->city_id ?? '') == $city->id ? 'selected' : '' }}>
+                            {{ $city->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-                    <div class="col-md-6">
-                        <label for="editMahalla" class="form-label">Махалля</label>
-                        <select name="mahalla_id" id="editMahalla" class="form-select" required>
-                            @foreach($mahallas as $mahalla)
-                                <option value="{{ $mahalla->id }}">{{ $mahalla->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>--}}
-                </div>
-                <div class="modal-footer mt-3">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
-                </div>
-            </form>
-        </div>
+            <div>
+                <label>Район</label>
+                <select name="district_id" id="edit_district_id" required>
+                    @foreach($districts as $district)
+                        <option value="{{ $district->id }}" {{ old('district_id', $user->address->district_id ?? '') == $district->id ? 'selected' : '' }}>
+                            {{ $district->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label>Махалла</label>
+                <select name="mahalla_id" id="edit_mahalla_id" required>
+                    @foreach($mahallas as $mahalla)
+                        <option value="{{ $mahalla->id }}" {{ old('mahalla_id', $user->address->mahalla_id ?? '') == $mahalla->id ? 'selected' : '' }}>
+                            {{ $mahalla->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label>Дом</label>
+                <input type="text" name="home" id="edit_home" value="{{ old('home', $user->address->home ?? '') }}" required>
+            </div>
+
+            <button type="submit" class="btn btn-success">Сохранить</button>
+            <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">Отмена</button>
+        </form>
     </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const modal = document.getElementById('editPilgrimModal');
-        const form = document.getElementById('editPilgrimForm');
+    function openEditModal(element) {
+        const userData = JSON.parse(element.getAttribute('data-user'));
 
-        document.querySelectorAll('.editBtn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const id = this.dataset.id;
-                const fullName = this.dataset.full_name;
-                const pinfl = this.dataset.pinfl;
-                const phone = this.dataset.phone;
-                const actionUrl = this.dataset.url;
+        const form = document.getElementById('editForm');
+        const modal = document.getElementById('editModal');
+        // Если userData.id пустой, это значит, что мы создаём нового пользователя
+        if (!userData) {
+            // Для создания нового пользователя форма должна использовать POST
+            form.action = '/pilgrims';
+            form.method = 'POST';
 
-                // Заполняем форму
-                form.action = actionUrl;
-                document.getElementById('editPilgrimId').value = id;
-                document.getElementById('editFullName').value = fullName;
-                document.getElementById('editPinfl').value = pinfl;
-                document.getElementById('editPhone').value = phone;
-            });
-        });
-    });
+            // Очистка всех полей формы для создания
+            document.getElementById('edit_full_name').value = '';
+            document.getElementById('edit_pinfl').value = '';
+            document.getElementById('edit_phone_number').value = '';
+            document.getElementById('edit_home').value = '';
+            document.getElementById('edit_oblast_id').value = '';
+            document.getElementById('edit_city_id').value = '';
+            document.getElementById('edit_district_id').value = '';
+            document.getElementById('edit_mahalla_id').value = '';
+            document.getElementById('edit_passport_series').value = '';
+
+            // Очистка поля пароля
+            document.getElementById('edit_password').value = '';
+
+            // Убираем скрытое поле для метода PUT
+            const methodField = form.querySelector('[name="_method"]');
+            if (methodField) {
+                methodField.remove();
+            }
+        } else {
+            // Если id есть, это значит, что мы редактируем существующего пользователя
+            form.action = `/pilgrims/${userData.id}`; // Или route('users.update', userData.id)
+            form.method = 'POST'; // Метод по умолчанию
+
+            // Добавляем скрытое поле _method с PUT
+            if (!form.querySelector('[name="_method"]')) {
+                const methodField = document.createElement('input');
+                methodField.type = 'hidden';
+                methodField.name = '_method';
+                methodField.value = 'PUT';
+                form.appendChild(methodField);
+            }
+
+            // Заполняем форму данными пользователя
+            document.getElementById('edit_full_name').value = userData.full_name;
+            document.getElementById('edit_pinfl').value = userData.pinfl;
+            document.getElementById('edit_phone_number').value = userData.phone_number;
+            document.getElementById('edit_home').value = userData.address.home;
+            document.getElementById('edit_oblast_id').value = userData.address.oblast_id;
+            document.getElementById('edit_city_id').value = userData.address.city_id;
+            document.getElementById('edit_district_id').value = userData.address.district_id;
+            document.getElementById('edit_mahalla_id').value = userData.address.mahalla_id;
+            document.getElementById('edit_passport_series').value = userData.passport_series;
+        }
+
+        // Открываем модалку
+        modal.style.display = 'block';
+    }
+    function closeModal() {
+        document.getElementById('editModal').style.display = 'none';
+    }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
