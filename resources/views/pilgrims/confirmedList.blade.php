@@ -305,7 +305,7 @@ $user = \Illuminate\Support\Facades\Auth::user();
 <!-- Контент -->
 <div class="content">
     <div class="header">
-        <h1>Очередь</h1>
+        <h1>Список подтверждённых</h1>
         <div style="display: flex; gap: 10px;">
             <a href="#" class="btn btn-sm btn-primary" onclick="openAddModal(this)">
                 Выбрать

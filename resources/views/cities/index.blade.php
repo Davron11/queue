@@ -263,7 +263,7 @@
 
 <!-- Контент -->
 <div class="content">
-    <h1>Очередь</h1>
+    <h1>Города</h1>
     <table class="queue-table">
         <thead>
         <tr>

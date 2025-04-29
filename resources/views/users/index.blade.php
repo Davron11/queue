@@ -16,18 +16,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        .content {
-            width: 100%;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between; /* Размещение элементов с максимальным расстоянием между ними */
-            align-items: center; /* Центрируем элементы по вертикали */
-            margin-bottom: 10px; /* Добавим небольшой отступ снизу */
-        }
-        h1 {
-            margin: 0; /* Убираем стандартные отступы */
-        }
+
         body {
             font-family: 'Rubik', sans-serif;
             background: #F5F5F5; /* Фон как в профиле */
@@ -78,6 +67,13 @@
             padding: 20px;
             width: 100%;
             position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between; /* Размещение элементов с максимальным расстоянием между ними */
+            align-items: center; /* Центрируем элементы по вертикали */
+            margin-bottom: 10px; /* Добавим небольшой отступ снизу */
         }
 
         h1 {
@@ -164,6 +160,140 @@
             transform: translateY(-2px);
         }
 
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: #FFFFFF; /* Белый фон как в profile-card */
+            margin: 5% auto;
+            padding: 30px 40px;
+            border-radius: 15px; /* Закругления как в профиле */
+            width: 600px;
+            max-width: 90%;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Фоновый орнамент для модального окна */
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('islamic-pattern.png') center/cover no-repeat;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .modal-content h2 {
+            font-family: 'Amiri', serif;
+            color: #D4A017; /* Золотой акцент */
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #1A3C34; /* Тёмный текст */
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-content input[type="text"],
+        .modal-content input[type="password"],
+        .modal-content select {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+            border: 1px solid #D4A0175e; /* Светло-золотая рамка */
+            border-radius: 6px;
+            background: #F5F5F5; /* Фон как в user-info */
+            font-size: 1rem;
+            color: #1A3C34;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-content input[type="text"]:focus,
+        .modal-content input[type="password"]:focus,
+        .modal-content select:focus {
+            outline: none;
+            border-color: #D4A017; /* Полный золотой при фокусе */
+            box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.2);
+        }
+
+        .modal-content button {
+            padding: 10px 18px;
+            margin-top: 10px;
+            margin-right: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.2s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-content .btn-success {
+            background-color: #D4A017; /* Золотой как в профиле */
+            color: #1A3C34;
+        }
+
+        .modal-content .btn-success:hover {
+            background-color: #B8860B; /* Темнее золотого */
+            transform: translateY(-2px);
+        }
+
+        .modal-content .btn-secondary {
+            background-color: #1A3C34; /* Тёмный фон */
+            color: #FFFFFF;
+        }
+
+        .modal-content .btn-secondary:hover {
+            background-color: #D4A017; /* Золотой при наведении */
+            color: #1A3C34;
+            transform: translateY(-2px);
+        }
+
+        /* Кнопка закрытия */
+        .close {
+            color: #1A3C34; /* Тёмный текст */
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 26px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #D4A017; /* Золотой при наведении */
+        }
+
         /* Адаптивность */
         @media (max-width: 768px) {
             body {
@@ -194,6 +324,22 @@
                 padding: 4px 8px;
                 font-size: 0.8rem;
             }
+
+            .modal-content {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .modal-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .modal-content input[type="text"],
+            .modal-content input[type="password"],
+            .modal-content select,
+            .modal-content button {
+                font-size: 0.9rem;
+            }
         }
 
         @media (max-width: 576px) {
@@ -206,105 +352,6 @@
                 min-width: 120px;
             }
         }
-
-        /* Модалки */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 5% auto;
-            padding: 30px 40px;
-            border-radius: 12px;
-            width: 500px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-            position: relative;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        .modal-content h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #333;
-            text-align: center;
-        }
-
-        .modal-content label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-            color: #444;
-        }
-
-        .modal-content input[type="text"] {
-            width: 100%;
-            padding: 10px 12px;
-            margin-bottom: 16px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-            box-sizing: border-box;
-            transition: border 0.3s ease;
-        }
-
-        .modal-content input[type="text"]:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-
-        .modal-content button {
-            padding: 10px 18px;
-            margin-top: 10px;
-            margin-right: 10px;
-            font-size: 14px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .modal-content .btn-success {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .modal-content .btn-success:hover {
-            background-color: #218838;
-        }
-
-        .modal-content .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .modal-content .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-
-        /* Кнопка закрытия */
-        .close {
-            color: #aaa;
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            font-size: 26px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: #000;
-        }
     </style>
 </head>
 <body>
@@ -314,7 +361,7 @@
 <!-- Контент -->
 <div class="content">
     <div class="header">
-        <h1>Очередь</h1>
+        <h1>Администраторы</h1>
         <a href="#" class="btn btn-sm btn-primary" onclick="openEditModal(this)">
             Создать
         </a>
@@ -331,26 +378,25 @@
         </tr>
         </thead>
         <tbody id="queueList">
-            @foreach($users as $index => $user)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $user->full_name }}</td>
-                    <td>{{ $user->pinfl }}</td>
-                    <td>{{ $user->phone_number }}</td>
-                    <td>{{
+        @foreach($users as $index => $user)
+            <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ $user->full_name }}</td>
+                <td>{{ $user->pinfl }}</td>
+                <td>{{ $user->phone_number }}</td>
+                <td>{{
                             $user->address ? (
                                 $user->address->oblast->name . ' ' .
                                 $user->address->city->name . ' ' .
-                                $user->address->oblast->name . ' ' .
+                                $user->address->district->name . ' ' .
                                 $user->address->mahalla->name . ' ' .
                                 $user->address->home
                             ) : ''
-
                     }}</td>
-                    <td>
-                        <!-- Здесь можно вставить кнопки: например, редактировать/удалить -->
-                        <a href="#" class="btn btn-sm btn-primary"
-                           data-user=' {{json_encode([
+                <td>
+                    <!-- Здесь можно вставить кнопки: например, редактировать/удалить -->
+                    <a href="#" class="btn btn-sm btn-primary"
+                       data-user=' {{json_encode([
                                "id" => $user->id,
                                "full_name" => $user->full_name,
                                "pinfl" => $user->pinfl,
@@ -362,58 +408,57 @@
                                    "mahalla_id" => $user->address->mahalla_id ?? '',
                                    "home" => $user->address->home ?? ''
                                ],
-                               "passport_series" => $user->passport_data ?? '',
-                               "passport_number" => $user->passport_number ?? '',
+                               "passport_series" => $user->passport_series ?? '',
                                "role_id" => $user->role_id ?? ''
                            ])}}'
-                           onclick="openEditModal(this)">
-                            Редактировать
-                        </a>
-                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
+                       onclick="openEditModal(this)">
+                        Редактировать
+                    </a>
+                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        @endforeach
         </tbody>
     </table>
 </div>
 
 <div id="editModal" class="modal" style="display:none;">
     <div class="modal-content">
-        <span class="close" onclick="closeModal('editModal')">&times;</span>
-        <h2>Редактировать пользователя</h2>
+        <span class="close" onclick="closeModal('editModal')">×</span>
+        <h2>Редактировать администратора</h2>
         <form id="editForm" method="POST">
             @csrf
             @method('PUT')
 
             <div>
                 <label>ФИО</label>
-                <input type="text" name="full_name" id="edit_full_name" value="{{ old('full_name', $user->full_name) }}" required>
+                <input type="text" name="full_name" id="edit_full_name" value="{{ old('full_name') }}" required>
             </div>
 
             <div>
                 <label>ПИНФЛ</label>
-                <input type="text" name="pinfl" id="edit_pinfl" value="{{ old('pinfl', $user->pinfl) }}" required>
+                <input type="text" name="pinfl" id="edit_pinfl" value="{{ old('pinfl') }}" required>
             </div>
 
             <div>
                 <label>Номер телефона</label>
-                <input type="text" name="phone_number" id="edit_phone_number" value="{{ old('phone_number', $user->phone_number) }}" required>
+                <input type="text" name="phone_number" id="edit_phone_number" value="{{ old('phone_number') }}" required>
             </div>
 
             <div>
                 <label>Серия паспорта</label>
-                <input type="text" name="passport_series" id="edit_passport_series" value="{{ old('passport_series', $user->passport_series ?? '') }}" required>
+                <input type="text" name="passport_series" id="edit_passport_series" value="{{ old('passport_series') }}" required>
             </div>
 
             <div>
                 <label>Роль</label>
                 <select name="role_id" id="edit_role_id" required>
                     @foreach($roles as $role)
-                        <option value="{{ $role->id }}" {{ old('role_id', $user->role_id ?? '') == $role->id ? 'selected' : '' }}>
+                        <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
                             {{ $role->name }}
                         </option>
                     @endforeach
@@ -431,7 +476,7 @@
                 <select name="oblast_id" id="edit_oblast_id" required>
                     <option value="">Выберите область</option>
                     @foreach($oblasts as $oblast)
-                        <option value="{{ $oblast->id }}" {{ old('oblast_id', $user->address->oblast_id ?? '') == $oblast->id ? 'selected' : '' }}>
+                        <option value="{{ $oblast->id }}" {{ old('oblast_id') == $oblast->id ? 'selected' : '' }}>
                             {{ $oblast->name }}
                         </option>
                     @endforeach
@@ -442,7 +487,7 @@
                 <label>Город</label>
                 <select name="city_id" id="edit_city_id" required>
                     @foreach($cities as $city)
-                        <option value="{{ $city->id }}" {{ old('city_id', $user->address->city_id ?? '') == $city->id ? 'selected' : '' }}>
+                        <option value="{{ $city->id }}" {{ old('city_id') == $city->id ? 'selected' : '' }}>
                             {{ $city->name }}
                         </option>
                     @endforeach
@@ -453,7 +498,7 @@
                 <label>Район</label>
                 <select name="district_id" id="edit_district_id" required>
                     @foreach($districts as $district)
-                        <option value="{{ $district->id }}" {{ old('district_id', $user->address->district_id ?? '') == $district->id ? 'selected' : '' }}>
+                        <option value="{{ $district->id }}" {{ old('district_id') == $district->id ? 'selected' : '' }}>
                             {{ $district->name }}
                         </option>
                     @endforeach
@@ -464,7 +509,7 @@
                 <label>Махалла</label>
                 <select name="mahalla_id" id="edit_mahalla_id" required>
                     @foreach($mahallas as $mahalla)
-                        <option value="{{ $mahalla->id }}" {{ old('mahalla_id', $user->address->mahalla_id ?? '') == $mahalla->id ? 'selected' : '' }}>
+                        <option value="{{ $mahalla->id }}" {{ old('mahalla_id') == $mahalla->id ? 'selected' : '' }}>
                             {{ $mahalla->name }}
                         </option>
                     @endforeach
@@ -473,7 +518,7 @@
 
             <div>
                 <label>Дом</label>
-                <input type="text" name="home" id="edit_home" value="{{ old('home', $user->address->home ?? '') }}" required>
+                <input type="text" name="home" id="edit_home" value="{{ old('home') }}" required>
             </div>
 
             <button type="submit" class="btn btn-success">Сохранить</button>
@@ -484,15 +529,15 @@
 
 <script>
     function openEditModal(element) {
-        const userData = JSON.parse(element.getAttribute('data-user'));
+        const userData = element.getAttribute('data-user') ? JSON.parse(element.getAttribute('data-user')) : null;
 
         const form = document.getElementById('editForm');
         const modal = document.getElementById('editModal');
-        console.log(userData)
-        // Если userData.id пустой, это значит, что мы создаём нового пользователя
+
+        // Если userData пустой, это значит, что мы создаём нового пользователя
         if (!userData) {
             // Для создания нового пользователя форма должна использовать POST
-            form.action = '/users'; // Или route('users.store') для использования с именованным маршрутом
+            form.action = "{{ route('users.store') }}";
             form.method = 'POST';
 
             // Очистка всех полей формы для создания
@@ -517,8 +562,8 @@
             }
         } else {
             // Если id есть, это значит, что мы редактируем существующего пользователя
-            form.action = `/users/${userData.id}`; // Или route('users.update', userData.id)
-            form.method = 'POST'; // Метод по умолчанию
+            form.action = "{{ route('users.update', ':id') }}".replace(':id', userData.id);
+            form.method = 'POST';
 
             // Добавляем скрытое поле _method с PUT
             if (!form.querySelector('[name="_method"]')) {
