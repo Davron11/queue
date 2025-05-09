@@ -165,31 +165,6 @@
 
 <body>
 <!-- Сайдбар -->
-{{--<div class="sidebar">
-    <h2>Админ Панель</h2>
-    <a href="{{ route('add') }}">Добавить жителя</a>
-    @if(!in_array($user->role->slug, ['users']))
-        <a href="{{ route('users.index') }}">Управление администраторами</a>
-    @endif
-    <a href="{{ route('pilgrims.index') }}">Очередь</a>
-    @if(in_array($user->role->slug, ['root_admin']))
-        <a href="{{ route('states.index') }}">Области</a>
-    @endif
-    @if(in_array($user->role->slug, ['root_admin', 'state_admin']))
-        <a href="{{ route('cities.index') }}">Города</a>
-    @endif
-    @if(in_array($user->role->slug, ['root_admin', 'state_admin', 'city_admin']))
-        <a href="{{ route('districts.index') }}">Район</a>
-    @endif
-    @if(in_array($user->role->slug, ['root_admin', 'state_admin', 'city_admin', 'mahalla_admin']))
-        <a href="{{ route('mahallas.index') }}">Махалла</a>
-    @endif
-    <a href="{{ route('status') }}">Профиль</a>
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
-    <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Выход</a>
-</div>--}}
 @include('layouts/sidebar')
 <!-- Контент -->
 <div class="content">
