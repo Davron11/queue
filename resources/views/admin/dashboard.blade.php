@@ -97,7 +97,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('/storage/islamic-pattern.png') center/cover no-repeat;
+            background: {{ asset('images/logo.logo.jpg') }} center/cover no-repeat;
             opacity: 0.05;
             z-index: -1;
         }

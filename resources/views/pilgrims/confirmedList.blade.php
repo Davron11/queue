@@ -305,17 +305,22 @@ $user = \Illuminate\Support\Facades\Auth::user();
 <!-- Контент -->
 <div class="content">
     <div class="header">
-        <h1>Список подтверждённых</h1>
+        @if(request('type') === 'hajj')
+            <h1>{{ __('messages.hajj_confirmed_list') }}</h1>
+        @endif
+            @if(request('type') === 'umra')
+                <h1>{{ __('messages.umrah_confirmed_list') }}</h1>
+            @endif
         <div style="display: flex; gap: 10px;">
             <a href="#" class="btn btn-sm btn-primary" onclick="openAddModal(this)">
-                Выбрать
+                {{ __('messages.take') }}
             </a>
 
             <!-- Форма для отправки POST-запроса на /pilgrims/complete -->
-            <form action="{{ route('pilgrims.complete') }}" method="POST" style="display: inline;">
+            <form action="{{ route('pilgrims.complete', ['type' => request('type')]) }}" method="POST" style="display: inline;">
                 @csrf
                 <button type="submit" class="btn btn-sm btn-success">
-                    Завершить
+                    {{ __('messages.end') }}
                 </button>
             </form>
         </div>
@@ -324,11 +329,11 @@ $user = \Illuminate\Support\Facades\Auth::user();
         <thead>
         <tr>
             <th>#</th>
-            <th>ФИО</th>
-            <th>ПИНФЛ</th>
-            <th>Номер телефона</th>
-            <th>Адрес</th>
-            <th>Действия</th>
+            <th>{{ __('messages.full_name') }}</th>
+            <th>{{ __('messages.pinfl') }}</th>
+            <th>{{ __('messages.phone_number') }}</th>
+            <th>{{ __('messages.address') }}</th>
+            <th>{{ __('messages.actions') }}</th>
         </tr>
         </thead>
         <tbody id="queueList">
@@ -350,9 +355,9 @@ $user = \Illuminate\Support\Facades\Auth::user();
                             $pilgrim->address->home
                         }}</td>
                 <td>
-                    <form action="{{ route('pilgrims.return', ['id' => $pilgrim->id]) }}" method="POST" style="display:inline;">
+                    <form action="{{ route('pilgrims.return', ['id' => $pilgrim->id, 'type' => request('type')]) }}" method="POST" style="display:inline;">
                         @csrf
-                        <button type="submit" class="btn btn-sm btn-danger">Отменить</button>
+                        <button type="submit" class="btn btn-sm btn-danger">{{ __('messages.cancel') }}</button>
                     </form>
                 </td>
             </tr>
@@ -363,13 +368,13 @@ $user = \Illuminate\Support\Facades\Auth::user();
 <div id="addModal" class="modal" style="display: none; position: fixed; top: 0; left: 0;
     width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
     <div style="background: white; padding: 20px; border-radius: 8px; width: 300px;">
-        <h5>Введите число</h5>
-        <form id="addForm" action="{{ route('pilgrims.addConfirm') }}" method="POST">
+        <h5>{{ __('messages.put') }}</h5>
+        <form id="addForm" action="{{ route('pilgrims.addConfirm', ['type' => request('type')]) }}" method="POST">
             @csrf
             <input type="number" name="number" required style="width: 100%; padding: 8px; margin-top: 10px;">
             <div style="margin-top: 15px; text-align: right;">
-                <button type="submit" class="btn btn-primary">Подтвердить</button>
-                <button type="button" onclick="closeAddModal()" class="btn btn-secondary">Отмена</button>
+                <button type="submit" class="btn btn-primary">{{ __('messages.take') }}</button>
+                <button type="button" onclick="closeAddModal()" class="btn btn-secondary">{{ __('messages.cancel') }}</button>
             </div>
         </form>
     </div>

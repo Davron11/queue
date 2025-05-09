@@ -330,20 +330,20 @@ $user = \Illuminate\Support\Facades\Auth::user();
 <!-- Контент -->
 <div class="content">
     <div class="header">
-        <h1>Очередь</h1>
+        <h1>{{ __('messages.queue') }}</h1>
         <a href="#" class="btn btn-sm btn-primary" onclick="openCreateModal(this)">
-            Создать
+            {{ __('messages.create') }}
         </a>
     </div>
     <table class="queue-table">
         <thead>
         <tr>
             <th>#</th>
-            <th>ФИО</th>
-            <th>ПИНФЛ</th>
-            <th>Номер телефона</th>
-            <th>Адрес</th>
-            <th>Действия</th>
+            <th>{{ __('messages.full_name') }}</th>
+            <th>{{ __('messages.pinfl') }}</th>
+            <th>{{ __('messages.phone_number') }}</th>
+            <th>{{ __('messages.address') }}</th>
+            <th>{{ __('messages.actions') }}</th>
         </tr>
         </thead>
         <tbody id="queueList">
@@ -353,19 +353,7 @@ $user = \Illuminate\Support\Facades\Auth::user();
                 <td>{{ $pilgrim->full_name }}</td>
                 <td>{{ $pilgrim->pinfl }}</td>
                 <td>{{ $pilgrim->phone_number }}</td>
-                <td>{{
-                            $pilgrim->address ? (
-                                $pilgrim->address->oblast->name .
-                                ', ' .
-                                $pilgrim->address->city->name .
-                                ', ' .
-                                $pilgrim->address->district->name .
-                                ', ' .
-                                $pilgrim->address->mahalla->name .
-                                ', ' .
-                                $pilgrim->address->home
-                            ) : ''
-                        }}</td>
+                <td>{{ \App\Services\PilgrimService::getAddress($pilgrim) }}</td>
                 <td>
                     <a href="#" class="btn btn-sm btn-primary"
                        data-user=' {{json_encode([
@@ -384,12 +372,12 @@ $user = \Illuminate\Support\Facades\Auth::user();
                                    "passport_number" => $pilgrim->passport_number ?? '',
                                ])}}'
                        onclick="openEditModal(this)">
-                        Редактировать
+                        {{ __('messages.edit') }}
                     </a>
                     <form action="{{ route('pilgrims.destroy', $pilgrim->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                        <button type="submit" class="btn btn-sm btn-danger">{{ __('messages.delete') }}</button>
                     </form>
                 </td>
             </tr>
@@ -400,40 +388,40 @@ $user = \Illuminate\Support\Facades\Auth::user();
 <div id="editModal" class="modal" style="display:none;">
     <div class="modal-content">
         <span class="close" onclick="closeModal('editModal')">×</span>
-        <h2>Редактировать жителя</h2>
+        <h2>{{ __('messages.edit') }}</h2>
         <form id="editForm" method="POST">
             @csrf
             @method('PUT')
 
             <div>
-                <label>ФИО</label>
+                <label>{{ __('messages.full_name') }}</label>
                 <input type="text" name="full_name" id="edit_full_name" value="{{ old('full_name', $user->full_name) }}" required>
             </div>
 
             <div>
-                <label>ПИНФЛ</label>
+                <label>{{ __('messages.pinfl') }}</label>
                 <input type="text" name="pinfl" id="edit_pinfl" value="{{ old('pinfl', $user->pinfl) }}" required>
             </div>
 
             <div>
-                <label>Номер телефона</label>
+                <label>{{ __('messages.phone_number') }}</label>
                 <input type="text" name="phone_number" id="edit_phone_number" value="{{ old('phone_number', $user->phone_number) }}" required>
             </div>
 
             <div>
-                <label>Серия паспорта</label>
+                <label>{{ __('messages.passport_data') }}</label>
                 <input type="text" name="passport_series" id="edit_passport_series" value="{{ old('passport_series', $user->passport_series ?? '') }}" required>
             </div>
 
             <div>
-                <label>Новый пароль</label>
+                <label>{{ __('messages.password') }}</label>
                 <input type="password" name="password" id="edit_password" placeholder="Введите новый пароль">
             </div>
 
             <div>
-                <label>Область</label>
+                <label>{{ __('messages.regions') }}</label>
                 <select name="oblast_id" id="edit_oblast_id" required>
-                    <option value="">Выберите область</option>
+                    <option value="">{{ __('messages.take') }} {{ __('messages.regions') }}</option>
                     @foreach($oblasts as $oblast)
                         <option value="{{ $oblast->id }}" {{ old('oblast_id', $user->address->oblast_id ?? '') == $oblast->id ? 'selected' : '' }}>
                             {{ $oblast->name }}
@@ -443,7 +431,7 @@ $user = \Illuminate\Support\Facades\Auth::user();
             </div>
 
             <div>
-                <label>Город</label>
+                <label>{{ __('messages.cites') }}</label>
                 <select name="city_id" id="edit_city_id" required>
                     @foreach($cities as $city)
                         <option value="{{ $city->id }}" {{ old('city_id', $user->address->city_id ?? '') == $city->id ? 'selected' : '' }}>

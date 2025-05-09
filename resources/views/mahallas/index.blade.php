@@ -263,13 +263,13 @@
 
 <!-- Контент -->
 <div class="content">
-    <h1>Махалли</h1>
+    <h1>{{ __('messages.mahallas') }}</h1>
     <table class="queue-table">
         <thead>
         <tr>
             <th>#</th>
-            <th>Название</th>
-            <th>Действия</th>
+            <th>{{ __('messages.name') }}</th>
+            <th>{{ __('messages.actions') }}</th>
         </tr>
         </thead>
         <tbody id="queueList">
@@ -286,12 +286,12 @@
                        data-url="{{ route('mahallas.update', $mahalla->id) }}"
                        data-bs-toggle="modal"
                        data-bs-target="#editPilgrimModal">
-                        Редактировать
+                        {{ __('messages.edit') }}
                     </a>
                     <form action="{{ route('mahallas.destroy', $mahalla->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                        <button type="submit" class="btn btn-sm btn-danger">{{ __('messages.delete') }}</button>
                     </form>
                 </td>
             </tr>
@@ -306,20 +306,20 @@
                 @csrf
                 @method('PUT')
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editPilgrimModalLabel">Редактировать паломника</h5>
+                    <h5 class="modal-title" id="editPilgrimModalLabel">{{ __('messages.edit') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body row g-3">
                     <input type="hidden" name="pilgrim_id" id="editId">
 
                     <div class="col-md-6">
-                        <label for="editName" class="form-label">Название</label>
+                        <label for="editName" class="form-label">{{ __('messages.name') }}</label>
                         <input type="text" class="form-control" name="name" id="editName" required>
                     </div>
                 </div>
                 <div class="modal-footer mt-3">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('messages.cancel') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ __('messages.save') }}</button>
                 </div>
             </form>
         </div>

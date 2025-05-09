@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'hajj_people_count_per_year' => env('HAJJ_PEOPLE_COUNT_PER_YEAR', 1),
+
 ];

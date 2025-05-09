@@ -191,31 +191,31 @@
     <div class="content">
         <h1>Добавить жителя</h1>
         <form id="addUserForm" action="add_user.php" method="POST" enctype="multipart/form-data">
-            <label for="full_name">ФИО:</label>
+            <label for="full_name">{{ __('messages.full_name') }}:</label>
             <input type="text" id="full_name" name="full_name" required>
 
-            <label for="phone">Телефон:</label>
+            <label for="phone">{{ __('messages.phone_number') }}:</label>
             <input type="text" id="phone" name="phone" required>
 
-            <label for="email">Email (необязательно):</label>
+            <label for="email">Email:</label>
             <input type="email" id="email" name="email">
 
-            <label for="address">Адрес:</label>
+            <label for="address">{{ __('messages.address') }}:</label>
             <input type="text" id="address" name="address" required>
 
-            <label for="passport">Паспортные данные (серия и номер):</label>
+            <label for="passport">{{ __('messages.passport_data') }}</label>
             <input type="text" id="passport" name="passport" required pattern="[A-Z]{2} \d{7}" placeholder="AA 1234567">
 
-            <label for="pinfl">ПИНФЛ:</label>
+            <label for="pinfl">{{ __('pinfl') }}:</label>
             <input type="text" id="pinfl" name="pinfl" required pattern="\d{14}" placeholder="12345678912345">
 
-            <label for="password">Пароль:</label>
+            <label for="password">{{ __('messages.password') }}:</label>
             <input type="password" id="password" name="password" required placeholder="Пароль">
 
-            <label for="photo">Фото (JPEG/PNG, до 5MB):</label>
+            <label for="photo">{{ __('messages.photo') }}</label>
             <input type="file" id="photo" name="photo" accept="image/jpeg, image/png" required>
 
-            <button type="submit">Добавить</button>
+                <button type="submit">{{ __('messages.add') }}</button>
         </form>
     </div>
 </div>

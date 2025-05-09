@@ -62,7 +62,7 @@ class StateController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $state = $this->oblast->find($id);logger($request->all());
+        $state = $this->oblast->find($id);
 
         $state->update($request->all());
 
@@ -74,7 +74,7 @@ class StateController extends Controller
      */
     public function destroy(string $id)
     {
-        if ($state = Oblast::find($id)) {logger($state);
+        if ($state = Oblast::find($id)) {
             $state->delete();
         }
 

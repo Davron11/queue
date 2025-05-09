@@ -168,29 +168,22 @@
 @include('layouts/sidebar')
 <!-- Контент -->
 <div class="content">
-    <h1>Добро пожаловать, {{ $user->full_name }}!</h1>
+    <h1>{{ __('messages.welcome') }}, {{ $user->full_name }}!</h1>
     <div class="card-container">
         <div class="card">
-            <h3>Жители</h3>
-            <p>Всего: <span id="total-residents">0</span></p>
+            <h3>{{ __('messages.residents') }}</h3>
+            <p>{{ __('messages.all') }}: <span id="total-residents">{{ $pilgrims_count }}</span></p>
         </div>
         <div class="card">
-            <h3>Очередь</h3>
-            <p>В ожидании: <span id="queue-count">0</span></p>
+            <h3>{{ __('messages.queue') }}</h3>
+            <p>{{ __('messages.waiting') }}: <span id="queue-count">{{ $confirmed_pilgrims_count }}</span></p>
         </div>
         <div class="card">
-            <h3>Администраторы</h3>
-            <p>Всего: <span id="admin-count">0</span></p>
+            <h3>{{ __('messages.admins') }}</h3>
+            <p>{{ __('messages.all') }}: <span id="admin-count">{{ $admins_count }}</span></p>
         </div>
     </div>
 </div>
-
-<script>
-    // Заглушка для демонстрации работы статистики
-    document.getElementById('total-residents').textContent = 145;
-    document.getElementById('queue-count').textContent = 57;
-    document.getElementById('admin-count').textContent = 20;
-</script>
 </body>
 
 </html>
