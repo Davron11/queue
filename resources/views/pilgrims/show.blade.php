@@ -8,7 +8,7 @@
     <!-- Google Fonts: Rubik и Amiri -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="ы">
     <style>
         /* Основные стили */
         body {
@@ -159,27 +159,96 @@
                 font-size: 14px;
             }
         }
+        .btn:hover {
+            background: #b88e15;
+        }
+
+        /* Обёртка для кнопок */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn i {
+            margin-right: 6px;
+        }
+
+        /* Стили таблицы */
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-table th, .user-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .user-table th {
+            background-color: #1A3C34;
+            color: #F5F5F5;
+            font-weight: bold;
+        }
+
+        .user-table td {
+            background-color: #fff;
+            color: #1A3C34;
+        }
+
+        .user-table tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
+
     </style>
 </head>
 <body>
 <div class="profile-card">
-    <img src="https://via.placeholder.com/120" alt="Фото профиля" class="profile-photo" id="profilePhoto">
-    <h2 id="fullName">Иванов Иван Иванович</h2>
+    <img src="{{ asset('images/profile.png') }}" alt="Фото профиля" class="profile-photo" id="profilePhoto">
+    <h2 id="fullName">{{ $pilgrim->full_name }}</h2>
     <div class="user-info">
         <p><strong>ПИНФЛ:</strong> <span id="pinfl">{{ $pilgrim->pinfl }}</span></p>
-        <p><strong>Телефон:</strong> <span id="phone">{{ $pilgrim->phone }}</span></p>
-        <p><strong>Адрес:</strong> <span id="address">{{ $pilgrim->address }}</span></p>
-        <p><strong>Email:</strong> <span id="email">ivanov@example.com</span></p>
+        <p><strong>Телефон:</strong> <span id="phone">{{ $pilgrim->phone_number }}</span></p>
+        <p><strong>Адрес:</strong> <span id="address">{{ \App\Services\PilgrimService::getAddress($pilgrim) }}</span></p>
+        <p><strong>Email:</strong> <span id="email">{{ $pilgrim->email }}</span></p>
     </div>
 
     <div class="queue-info">
         <h3>Очередь</h3>
-        <p><strong>Позиция:</strong> <span id="queuePosition">42</span></p>
-        <p><strong>Статус:</strong> <span id="queueStatus">Ожидание</span></p>
-        <p><strong>Ориентировочное время ожидания:</strong> <span id="estimatedTime">3 недели</span></p>
+        <table>
+            <tr>
+                <th>#</th>
+                <th>{{ __('messages.hajj') }}</th>
+                <th>{{ __('messages.umra') }}</th>
+            </tr>
+            <tr>
+                <td>{{ __('messages.position') }}</td>
+                <td>{{ \App\Services\PilgrimService::getPosition($pilgrim, 'hajj') }}</td>
+                <td>{{ \App\Services\PilgrimService::getPosition($pilgrim, 'umra') }}</td>
+            </tr>
+            <tr>
+                <td>{{ __('messages.status') }}</td>
+                <td>{{ __('messages.' . $pilgrim->hajj_status) }}</td>
+                <td>{{ __('messages.' . $pilgrim->umra_status) }}</td>
+            </tr>
+            <tr>
+                <td>{{ __('messages.waiting_time') }}</td>
+                <td>{{ \App\Services\PilgrimService::getHajjWaitingTime($pilgrim) . ' ' . __('messages.years') }}</td>
+                <td></td>
+            </tr>
+        </table>
     </div>
-
+    <button class="btn" onclick="switchLanguage()"><i class="fa-solid fa-language"></i>Язык</button>
     <button class="btn" onclick="logout()">Выход</button>
+    <button class="btn" onclick="window.open('https://example.com', '_blank')"><i class="fa-solid fa-window-restore"></i>Вкладка</button>
 </div>
 
 <script>

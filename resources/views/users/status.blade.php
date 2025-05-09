@@ -164,8 +164,8 @@
 </head>
 <body>
 <div class="profile-card">
-    <img src="https://via.placeholder.com/130" alt="Фото профиля" class="profile-photo" id="profilePhoto">
-    <h2 id="fullName">Иванов Иван Иванович</h2>
+    <img src="{{ asset('images/profile.png') }}" alt="Фото профиля" class="profile-photo" id="profilePhoto">
+    <h2 id="fullName"></h2>
     <div class="user-info">
         <p><i class="fas fa-id-card"></i> <strong>ПИНФЛ:</strong> <span id="pinfl">12345678901234</span></p>
         <p><i class="fas fa-phone"></i> <strong>Телефон:</strong> <span id="phone">+998 (90) 123-45-67</span></p>

@@ -43,7 +43,7 @@ class AuthenticatedSessionController extends Controller
             if ($user->role->slug !== 'users') {
                 return redirect('dashboard');
             } else {
-                return redirect('users/' . $user->id . '/status');
+                return redirect(route('pilgrims.show', ['id' => $user->id]));
             }
         }
 

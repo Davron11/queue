@@ -165,57 +165,25 @@
 
 <body>
 <!-- Сайдбар -->
-{{--<div class="sidebar">
-    <h2>Админ Панель</h2>
-    <a href="{{ route('add') }}">Добавить жителя</a>
-    @if(!in_array($user->role->slug, ['users']))
-        <a href="{{ route('users.index') }}">Управление администраторами</a>
-    @endif
-    <a href="{{ route('pilgrims.index') }}">Очередь</a>
-    @if(in_array($user->role->slug, ['root_admin']))
-        <a href="{{ route('states.index') }}">Области</a>
-    @endif
-    @if(in_array($user->role->slug, ['root_admin', 'state_admin']))
-        <a href="{{ route('cities.index') }}">Города</a>
-    @endif
-    @if(in_array($user->role->slug, ['root_admin', 'state_admin', 'city_admin']))
-        <a href="{{ route('districts.index') }}">Район</a>
-    @endif
-    @if(in_array($user->role->slug, ['root_admin', 'state_admin', 'city_admin', 'mahalla_admin']))
-        <a href="{{ route('mahallas.index') }}">Махалла</a>
-    @endif
-    <a href="{{ route('status') }}">Профиль</a>
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
-    <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Выход</a>
-</div>--}}
 @include('layouts/sidebar')
 <!-- Контент -->
 <div class="content">
-    <h1>Добро пожаловать, {{ $user->full_name }}!</h1>
+    <h1>{{ __('messages.welcome') }}, {{ $user->full_name }}!</h1>
     <div class="card-container">
         <div class="card">
-            <h3>Жители</h3>
-            <p>Всего: <span id="total-residents">0</span></p>
+            <h3>{{ __('messages.residents') }}</h3>
+            <p>{{ __('messages.all') }}: <span id="total-residents">{{ $pilgrims_count }}</span></p>
         </div>
         <div class="card">
-            <h3>Очередь</h3>
-            <p>В ожидании: <span id="queue-count">0</span></p>
+            <h3>{{ __('messages.queue') }}</h3>
+            <p>{{ __('messages.waiting') }}: <span id="queue-count">{{ $confirmed_pilgrims_count }}</span></p>
         </div>
         <div class="card">
-            <h3>Администраторы</h3>
-            <p>Всего: <span id="admin-count">0</span></p>
+            <h3>{{ __('messages.admins') }}</h3>
+            <p>{{ __('messages.all') }}: <span id="admin-count">{{ $admins_count }}</span></p>
         </div>
     </div>
 </div>
-
-<script>
-    // Заглушка для демонстрации работы статистики
-    document.getElementById('total-residents').textContent = 145;
-    document.getElementById('queue-count').textContent = 57;
-    document.getElementById('admin-count').textContent = 20;
-</script>
 </body>
 
 </html>

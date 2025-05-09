@@ -60,7 +60,7 @@ class MahallaController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {logger($request->all());
+    {
         $mahalla = $this->mahalla->find($id);
 
         $mahalla->update($request->all());

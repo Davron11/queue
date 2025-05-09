@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PilgrimCollection;
 use App\Models\City;
 use App\Models\District;
 use App\Models\Mahalla;
 use App\Models\Oblast;
 use App\Models\Pilgrim;
 use App\Services\PilgrimService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PilgrimController extends Controller
@@ -54,7 +56,12 @@ class PilgrimController extends Controller
                 'address.district:id,name',
                 'address.mahalla:id,name',
             ])
-            ->where('status', 'confirmed')
+            ->when(($request->type === 'hajj'), function ($query) use ($request) {
+                $query->where('hajj_status', 'confirmed');
+            })
+            ->when(($request->type === 'umra'), function ($query) use ($request) {
+                $query->where('umra_status', 'confirmed');
+            })
             ->get();
 
         return view('pilgrims.confirmedList', compact('pilgrims'));
@@ -65,7 +72,7 @@ class PilgrimController extends Controller
      */
     public function create()
     {
-        logger('create');
+        //
     }
 
     /**
@@ -109,29 +116,54 @@ class PilgrimController extends Controller
     }
 
     public function addConfirm(Request $request)
-    {logger($request->all());
+    {
         $pilgrims = $this->pilgrim;
 
-        $pilgrims = $pilgrims->where('status', 'waiting')
-            ->orderByRaw('last_pilgrimage_date IS NOT NULL')
-            ->orderBy('last_pilgrimage_date', 'asc')
+        $pilgrims = $pilgrims
+            ->when(($request->type === 'hajj'), function ($query) use ($request) {
+                $query->where('hajj_status', 'waiting')
+                    ->orderByRaw('last_hajj_date IS NOT NULL')
+                    ->orderBy('last_hajj_date', 'asc');
+            })
+            ->when(($request->type === 'umra'), function ($query) use ($request) {
+                $query->where('umra_status', 'waiting')
+                    ->orderByRaw('last_umra_date IS NOT NULL')
+                    ->orderBy('last_umra_date', 'asc');
+            })
             ->limit($request->number)->get();
 
         foreach ($pilgrims as $pilgrim) {
-            $pilgrim->status = 'confirmed';
+            if ($request->type === 'hajj') {
+                $pilgrim->hajj_status = 'confirmed';
+            } elseif ($request->type === 'umra') {
+                $pilgrim->umra_status = 'confirmed';
+            }
+
             $pilgrim->save();
         }
 
-        return redirect()->route('pilgrims.confirmedList');
+        return redirect()->route('pilgrims.confirmedList', ['type' => \request('type')]);
     }
 
     public function completeConfirms()
     {
         $pilgrims = $this->pilgrim;
 
-        $pilgrims->where('status', 'confirmed')->update(['status' => 'inactive']);
+        $pilgrims->when((request('type') === 'hajj'), function ($query) {
+            $query->where('hajj_status', 'confirmed')
+                ->update([
+                    'hajj_status' => 'inactive',
+                    'last_hajj_date' => Carbon::today()->toDateString(),
+                ]);
+        })->when((request('type') === 'umra'), function ($query) {
+            $query->where('umra_status', 'inactive')
+                ->update([
+                    'umra_status' => 'inactive',
+                    'last_umra_date' => Carbon::today()->toDateString(),
+                ]);
+        });
 
-        return redirect()->route('pilgrims.confirmedList');
+        return redirect()->route('pilgrims.confirmedList', ['type' => \request('type')]);
     }
 
     public function returnWaiting(Request $request)
@@ -142,7 +174,7 @@ class PilgrimController extends Controller
         $pilgrim->status = 'waiting';
         $pilgrim->save();
 
-        return redirect()->route('pilgrims.confirmedList');
+        return redirect()->route('pilgrims.confirmedList', ['type' => \request('type')]);
     }
 
     /**
