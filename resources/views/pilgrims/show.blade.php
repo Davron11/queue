@@ -1,3 +1,10 @@
+<?php
+use Illuminate\Support\Facades\Auth;
+
+$user = Auth::user();
+$currentLocale = app()->getLocale();
+$otherLocale = ($currentLocale === 'ru') ? 'uz' : 'ru';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -246,9 +253,20 @@
             </tr>
         </table>
     </div>
-    <button class="btn" onclick="switchLanguage()"><i class="fa-solid fa-language"></i>Язык</button>
+    <form method="POST" action="{{ route('locale.switch') }}">
+        @csrf
+        @if($currentLocale === 'uz')
+            <button class="btn" type="submit" name="locale" value="ru">
+                {{ __('messages.ru') }}
+            </button>
+        @elseif($currentLocale === 'ru')
+            <button class="btn" type="submit" name="locale" value="uz">
+                {{ __('messages.uz') }}
+            </button>
+        @endif
+    </form>
     <button class="btn" onclick="logout()">Выход</button>
-    <button class="btn" onclick="window.open('https://example.com', '_blank')"><i class="fa-solid fa-window-restore"></i>Вкладка</button>
+    <button class="btn" onclick="window.open('{{ route('tour_operators') }}')"><i class="fa-solid fa-window-restore"></i>Вкладка</button>
 </div>
 
 <script>

@@ -37,13 +37,16 @@ $otherLocale = ($currentLocale === 'ru') ? 'uz' : 'ru';
         @csrf
     </form>
 
-    <form method="POST" action="{{ route('locale.switch') }}" style="margin-bottom: 15px;">
+    <form method="POST" action="{{ route('locale.switch') }}">
         @csrf
-        <button type="submit" name="locale" value="ru" {{ $currentLocale === 'ru' ? 'disabled' : '' }}>
-            {{ __('messages.ru') }}
-        </button>
-        <button type="submit" name="locale" value="uz" {{ $currentLocale === 'uz' ? 'disabled' : '' }}>
-            {{ __('messages.uz') }}
-        </button>
+        @if($currentLocale === 'uz')
+            <button class="btn" type="submit" name="locale" value="ru">
+                {{ __('messages.ru') }}
+            </button>
+        @elseif($currentLocale === 'ru')
+            <button class="btn" type="submit" name="locale" value="uz">
+                {{ __('messages.uz') }}
+            </button>
+        @endif
     </form>
 </div>
