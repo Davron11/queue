@@ -374,6 +374,17 @@ $user = \Illuminate\Support\Facades\Auth::user();
                        onclick="openEditModal(this)">
                         {{ __('messages.edit') }}
                     </a>
+                    @if($pilgrim->hajj_status === 'inactive')
+                        <form action="{{ route('pilgrims.return', ['id' => $pilgrim->id, 'type' => 'hajj']) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-secondary">{{ __('messages.return') }}</button>
+                        </form>
+                    @elseif($pilgrim->umra_status === 'inactive')
+                        <form action="{{ route('pilgrims.return', ['id' => $pilgrim->id, 'type' => 'umra']) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-secondary">{{ __('messages.return') }}</button>
+                        </form>
+                    @endif
                     <form action="{{ route('pilgrims.destroy', $pilgrim->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')

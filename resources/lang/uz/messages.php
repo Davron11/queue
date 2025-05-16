@@ -50,7 +50,8 @@ return [
     'hajj' => 'Hajj',
     'umra' => 'Umra',
     'all' => 'Hammasi',
-    'waiting' => 'Kutilmoqda'
+    'waiting' => 'Kutilmoqda',
+    'return' => ''
 ];
 
 

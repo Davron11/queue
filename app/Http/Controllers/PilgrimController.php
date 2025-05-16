@@ -171,10 +171,16 @@ class PilgrimController extends Controller
         if (!$pilgrim = Pilgrim::find($request->id)) {
             return redirect()->route('pilgrims.confirmedList');
         }
-        $pilgrim->status = 'waiting';
-        $pilgrim->save();
-
-        return redirect()->route('pilgrims.confirmedList', ['type' => \request('type')]);
+        logger(\request('type'));
+        if (request('type') === 'hajj') {
+            $pilgrim->hajj_status = 'waiting';
+            $pilgrim->save();
+        }
+        if (request('type') === 'umra') {
+            $pilgrim->umra_status = 'waiting';
+            $pilgrim->save();
+        }
+        return redirect()->back();
     }
 
     /**

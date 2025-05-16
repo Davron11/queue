@@ -12,10 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pilgrims', function (Blueprint $table) {
-            $table->renameColumn('status', 'hajj_status');
-            $table->renameColumn('last_pilgrimage_date', 'last_hajj_date');
             $table->string('umra_status')->default('waiting');
             $table->date('last_umra_date')->nullable();
+        });
+
+        Schema::table('pilgrims', function (Blueprint $table) {
+            $table->renameColumn('status', 'hajj_status');
+            $table->renameColumn('last_pilgrimage_date', 'last_hajj_date');
         });
     }
 
