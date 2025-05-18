@@ -38,6 +38,7 @@ Route::middleware([SetLocale::class])->group(function () {
     Route::resource('mahallas', \App\Http\Controllers\MahallaController::class);
 
     Route::post('/locale-switch', [\App\Http\Controllers\LocalizationController::class, 'switch'])->name('locale.switch');
+
     Route::get('/tour_operators', function (){
         return view('tour_operators');
     })->name('tour_operators');

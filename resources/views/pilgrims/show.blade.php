@@ -266,7 +266,10 @@ $otherLocale = ($currentLocale === 'ru') ? 'uz' : 'ru';
         @endif
     </form>
     <button class="btn" onclick="logout()">Выход</button>
-    <button class="btn" onclick="window.open('{{ route('tour_operators') }}')"><i class="fa-solid fa-window-restore"></i>Вкладка</button>
+    <button class="btn" onclick="window.open('{{ route("tour_operators") }}')">
+        <i class="fa-solid fa-window-restore"></i> Тур агенства
+    </button>
+
 </div>
 
 <script>
